@@ -10,6 +10,7 @@ import SwiftUI
 struct Calculator: View {
 	
 	@EnvironmentObject var viewModel: CalculatorViewModel
+	@State private var brain = CalculatorBrain()
 	
     var body: some View {
 		ZStack {
@@ -19,6 +20,7 @@ struct Calculator: View {
 				.overlay(
 					VStack(spacing: 20) {
 						DigitDisplay()
+						CalculatorButtonsView(brain: $brain)
 				}
 			)
 		}
