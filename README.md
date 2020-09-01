@@ -8,3 +8,4 @@ Was supposed to be in CSS as per the instructions but I chose to flex my SwiftUI
 Calculator is fully functional
 
 # Screenshot - (GIF)
+![Calculator Screenshot](https://raw.githubusercontent.com/chadarutherford/TakeHomeChallenges/main/CalculatorTakeHomeProject/Screenshots/calculator.gif)
