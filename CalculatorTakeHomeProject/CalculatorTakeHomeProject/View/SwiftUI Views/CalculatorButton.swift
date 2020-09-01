@@ -28,6 +28,6 @@ struct CalculatorButton: View {
 
 struct CalculatorButton_Previews: PreviewProvider {
 	static var previews: some View {
-		CalculatorButton(color: Color(.systemBlue), text: "=", width: 67) {}
+		CalculatorButton(color: .equal, text: "=", width: 67) {}
 	}
 }
