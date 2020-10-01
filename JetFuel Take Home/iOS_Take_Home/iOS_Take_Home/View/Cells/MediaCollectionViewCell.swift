@@ -15,7 +15,17 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		imageView.backgroundColor = .blue
 		imageView.layer.cornerRadius = 15
 		imageView.layer.cornerCurve = .continuous
+		imageView.clipsToBounds = true
 		return imageView
+	}()
+	
+	let videoPreview: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .blue
+		view.layer.cornerRadius = 15
+		view.layer.cornerCurve = .continuous
+		return view
 	}()
 	
 	let linkButton: UIButton = {
@@ -44,6 +54,13 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		return button
 	}()
 	
+	var campaignController: CampaignController?
+	var media: Media? {
+		didSet {
+			updateViews()
+		}
+	}
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		configureUI()
@@ -54,33 +71,69 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func configureUI() {
-		contentView.translatesAutoresizingMaskIntoConstraints = false
-		contentView.addSubview(previewImageView)
-		contentView.addSubview(linkButton)
-		contentView.addSubview(downloadButton)
+	override func prepareForReuse() {
+		previewImageView.image = nil
+	}
+	
+	private func configureVideoPreview() {
+		videoPreview.removeFromSuperview()
+		previewImageView.removeFromSuperview()
+		contentView.addSubview(videoPreview)
 		NSLayoutConstraint.activate([
-			contentView.topAnchor.constraint(equalTo: topAnchor),
-			contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			videoPreview.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			videoPreview.topAnchor.constraint(equalTo: contentView.topAnchor),
+			videoPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			
+			linkButton.topAnchor.constraint(equalTo: videoPreview.bottomAnchor, constant: 8),
+			downloadButton.topAnchor.constraint(equalTo: videoPreview.bottomAnchor, constant: 8),
+		])
+	}
+	
+	private func configureImageView() {
+		videoPreview.removeFromSuperview()
+		previewImageView.removeFromSuperview()
+		contentView.addSubview(previewImageView)
+		NSLayoutConstraint.activate([
 			previewImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			previewImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
 			previewImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			
 			linkButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
+			downloadButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
+		])
+	}
+	
+	private func configureUI() {
+		
+		contentView.addSubview(linkButton)
+		contentView.addSubview(downloadButton)
+		NSLayoutConstraint.activate([
 			linkButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
 			linkButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor),
 			linkButton.heightAnchor.constraint(equalToConstant: 40),
 			linkButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-
-			downloadButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
+			
 			downloadButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor),
 			downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
 			downloadButton.heightAnchor.constraint(equalToConstant: 40),
 			downloadButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
 		])
+	}
+	
+	private func updateViews() {
+		guard let media = media,
+			  let campaignController = campaignController
+		else { return }
+		configureImageView()
+		campaignController.fetchImage(for: media.coverPhotoURL) { [weak self] result in
+			guard let self = self else { return }
+			switch result {
+			case .success(let image):
+				self.previewImageView.image = image
+			case .failure(let error):
+				print(error)
+			}
+		}
 	}
 }
 

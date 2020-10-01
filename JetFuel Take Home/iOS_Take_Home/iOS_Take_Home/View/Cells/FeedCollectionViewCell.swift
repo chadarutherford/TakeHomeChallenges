@@ -56,6 +56,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
 	var campaign: Campaign? {
 		didSet {
 			updateViews()
+			mediaCollectionView.reloadData()
 		}
 	}
 	
@@ -140,11 +141,15 @@ extension FeedCollectionViewCell: ReuseIdentifiable {
 
 extension FeedCollectionViewCell: UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return 5
+		campaign?.medias.count ?? 0
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = mediaCollectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.reuseIdentifier, for: indexPath) as? MediaCollectionViewCell else { fatalError("Unable to dequeue a MediaCollectionViewCell") }
+		guard let cell = mediaCollectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.reuseIdentifier, for: indexPath) as? MediaCollectionViewCell,
+			  let campaign = campaign else { fatalError("Unable to dequeue a MediaCollectionViewCell") }
+		let media = campaign.medias[indexPath.item]
+		cell.campaignController = campaignController
+		cell.media = media
 		return cell
 	}
 }
