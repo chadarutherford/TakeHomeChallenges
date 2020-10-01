@@ -42,6 +42,13 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		return label
 	}()
 	
+	let mediaCollectionView: UICollectionView = {
+		let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+		cv.translatesAutoresizingMaskIntoConstraints = false
+		cv.backgroundColor = .secondarySystemBackground
+		return cv
+	}()
+	
 	var campaignController: CampaignController?
 	var campaign: Campaign? {
 		didSet {
@@ -59,11 +66,16 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func prepareForReuse() {
+		iconImageView.image = nil
+	}
+	
 	private func configureUI() {
 		contentView.addSubview(iconImageView)
 		contentView.addSubview(nameLabel)
 		contentView.addSubview(payLabel)
 		contentView.addSubview(payPerInstallLabel)
+		contentView.addSubview(mediaCollectionView)
 		NSLayoutConstraint.activate([
 			iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
 			iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -82,7 +94,12 @@ class FeedCollectionViewCell: UICollectionViewCell {
 			
 			payPerInstallLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
 			payPerInstallLabel.trailingAnchor.constraint(greaterThanOrEqualTo: contentView.trailingAnchor),
-			payPerInstallLabel.heightAnchor.constraint(equalToConstant: 25)
+			payPerInstallLabel.heightAnchor.constraint(equalToConstant: 25),
+			
+			mediaCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			mediaCollectionView.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16),
+			mediaCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			mediaCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
 		])
 	}
 	
