@@ -13,6 +13,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		let imageView = UIImageView()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.layer.cornerRadius = 15
+		imageView.layer.cornerCurve = .continuous
 		imageView.clipsToBounds = true
 		imageView.contentMode = .scaleAspectFit
 		return imageView
@@ -42,7 +43,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		return label
 	}()
 	
-	let mediaCollectionView: UICollectionView = {
+	lazy var mediaCollectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
 		let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -86,6 +87,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		contentView.addSubview(payPerInstallLabel)
 		contentView.addSubview(mediaCollectionView)
 		NSLayoutConstraint.activate([
+			
 			iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
 			iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
 			iconImageView.heightAnchor.constraint(equalToConstant: 60),
@@ -142,14 +144,14 @@ extension FeedCollectionViewCell: UICollectionViewDataSource {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.reuseIdentifier, for: indexPath)
+		guard let cell = mediaCollectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.reuseIdentifier, for: indexPath) as? MediaCollectionViewCell else { fatalError("Unable to dequeue a MediaCollectionViewCell") }
 		return cell
 	}
 }
 
 extension FeedCollectionViewCell: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		CGSize(width: (collectionView.frame.width / 3) - 20, height: 180)
+		CGSize(width: (mediaCollectionView.frame.width / 3) - 20, height: ((mediaCollectionView.frame.width / 3) - 5) * 2)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
