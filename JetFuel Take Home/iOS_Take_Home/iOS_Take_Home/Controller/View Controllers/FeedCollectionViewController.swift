@@ -42,6 +42,8 @@ class FeedCollectionViewController: UICollectionViewController {
 	
 	private func configureCollectionView() {
 		collectionView.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: FeedCollectionViewCell.reuseIdentifier)
+		collectionView.showsVerticalScrollIndicator = false
+		collectionView.showsHorizontalScrollIndicator = false
 	}
 	
 	private func configureUI() {

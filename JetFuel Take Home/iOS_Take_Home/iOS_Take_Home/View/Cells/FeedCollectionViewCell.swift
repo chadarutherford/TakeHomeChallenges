@@ -79,6 +79,8 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		mediaCollectionView.dataSource = self
 		mediaCollectionView.delegate = self
 		mediaCollectionView.register(MediaCollectionViewCell.self, forCellWithReuseIdentifier: MediaCollectionViewCell.reuseIdentifier)
+		mediaCollectionView.showsVerticalScrollIndicator = false
+		mediaCollectionView.showsHorizontalScrollIndicator = false
 	}
 	
 	private func configureUI() {

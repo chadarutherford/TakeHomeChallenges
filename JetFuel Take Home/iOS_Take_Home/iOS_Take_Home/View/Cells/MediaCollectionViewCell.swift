@@ -12,20 +12,31 @@ class MediaCollectionViewCell: UICollectionViewCell {
 	let previewImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.translatesAutoresizingMaskIntoConstraints = false
-		imageView.backgroundColor = .blue
 		imageView.layer.cornerRadius = 15
 		imageView.layer.cornerCurve = .continuous
 		imageView.clipsToBounds = true
 		return imageView
 	}()
 	
-	let videoPreview: UIView = {
+	let blurView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .blue
 		view.layer.cornerRadius = 15
 		view.layer.cornerCurve = .continuous
+		view.clipsToBounds = true
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
 		return view
+	}()
+	
+	let playButton: UIButton = {
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(UIImage.play.applyingSymbolConfiguration(UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 30))), for: .normal)
+		button.backgroundColor = .clear
+		button.tintColor = .white
+		button.layer.cornerRadius = 4
+		button.clipsToBounds = true
+		return button
 	}()
 	
 	let linkButton: UIButton = {
@@ -75,44 +86,22 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		previewImageView.image = nil
 	}
 	
-	private func configureVideoPreview() {
-		videoPreview.removeFromSuperview()
-		previewImageView.removeFromSuperview()
-		contentView.addSubview(videoPreview)
-		NSLayoutConstraint.activate([
-			videoPreview.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			videoPreview.topAnchor.constraint(equalTo: contentView.topAnchor),
-			videoPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			
-			linkButton.topAnchor.constraint(equalTo: videoPreview.bottomAnchor, constant: 8),
-			downloadButton.topAnchor.constraint(equalTo: videoPreview.bottomAnchor, constant: 8),
-		])
-	}
-	
-	private func configureImageView() {
-		videoPreview.removeFromSuperview()
-		previewImageView.removeFromSuperview()
+	private func configureUI() {
 		contentView.addSubview(previewImageView)
+		contentView.addSubview(linkButton)
+		contentView.addSubview(downloadButton)
 		NSLayoutConstraint.activate([
 			previewImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 			previewImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
 			previewImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 			
 			linkButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
-			downloadButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
-		])
-	}
-	
-	private func configureUI() {
-		
-		contentView.addSubview(linkButton)
-		contentView.addSubview(downloadButton)
-		NSLayoutConstraint.activate([
 			linkButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
 			linkButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor),
 			linkButton.heightAnchor.constraint(equalToConstant: 40),
 			linkButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
 			
+			downloadButton.topAnchor.constraint(equalTo: previewImageView.bottomAnchor, constant: 8),
 			downloadButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor),
 			downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
 			downloadButton.heightAnchor.constraint(equalToConstant: 40),
@@ -120,11 +109,24 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		])
 	}
 	
+	private func addPlayButton() {
+		previewImageView.addSubview(blurView)
+		blurView.addSubview(playButton)
+		NSLayoutConstraint.activate([
+			blurView.leadingAnchor.constraint(equalTo: previewImageView.leadingAnchor),
+			blurView.topAnchor.constraint(equalTo: previewImageView.topAnchor),
+			blurView.trailingAnchor.constraint(equalTo: previewImageView.trailingAnchor),
+			blurView.bottomAnchor.constraint(equalTo: previewImageView.bottomAnchor),
+			
+			playButton.centerXAnchor.constraint(equalTo: blurView.centerXAnchor),
+			playButton.centerYAnchor.constraint(equalTo: blurView.centerYAnchor)
+		])
+	}
+	
 	private func updateViews() {
 		guard let media = media,
 			  let campaignController = campaignController
 		else { return }
-		configureImageView()
 		campaignController.fetchImage(for: media.coverPhotoURL) { [weak self] result in
 			guard let self = self else { return }
 			switch result {
@@ -133,6 +135,9 @@ class MediaCollectionViewCell: UICollectionViewCell {
 			case .failure(let error):
 				print(error)
 			}
+		}
+		if media.mediaType == "video" {
+			addPlayButton()
 		}
 	}
 }
