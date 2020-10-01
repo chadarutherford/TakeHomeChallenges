@@ -15,7 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		guard let windowScene = scene as? UIWindowScene else { return }
 		window = UIWindow(windowScene: windowScene)
-		window?.rootViewController = ViewController(nibName: nil, bundle: nil)
+		let layout = FeedCollectionViewLayout()
+		layout.scrollDirection = .vertical
+		let feedViewController = FeedCollectionViewController(collectionViewLayout: layout)
+		let navController = UINavigationController(rootViewController: feedViewController)
+		window?.rootViewController = navController
 		window?.makeKeyAndVisible()
 	}
 
