@@ -43,7 +43,9 @@ class FeedCollectionViewCell: UICollectionViewCell {
 	}()
 	
 	let mediaCollectionView: UICollectionView = {
-		let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+		let layout = UICollectionViewFlowLayout()
+		layout.scrollDirection = .horizontal
+		let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
 		cv.translatesAutoresizingMaskIntoConstraints = false
 		cv.backgroundColor = .secondarySystemBackground
 		return cv
@@ -59,6 +61,7 @@ class FeedCollectionViewCell: UICollectionViewCell {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		configureUI()
+		configureCollectionView()
 	}
 	
 	@available(*, unavailable)
@@ -68,6 +71,12 @@ class FeedCollectionViewCell: UICollectionViewCell {
 	
 	override func prepareForReuse() {
 		iconImageView.image = nil
+	}
+	
+	private func configureCollectionView() {
+		mediaCollectionView.dataSource = self
+		mediaCollectionView.delegate = self
+		mediaCollectionView.register(MediaCollectionViewCell.self, forCellWithReuseIdentifier: MediaCollectionViewCell.reuseIdentifier)
 	}
 	
 	private func configureUI() {
@@ -124,5 +133,26 @@ class FeedCollectionViewCell: UICollectionViewCell {
 extension FeedCollectionViewCell: ReuseIdentifiable {
 	static var reuseIdentifier: String {
 		String(describing: Self.self)
+	}
+}
+
+extension FeedCollectionViewCell: UICollectionViewDataSource {
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return 5
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.reuseIdentifier, for: indexPath)
+		return cell
+	}
+}
+
+extension FeedCollectionViewCell: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		CGSize(width: (collectionView.frame.width / 3) - 20, height: 180)
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+		UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
 	}
 }
