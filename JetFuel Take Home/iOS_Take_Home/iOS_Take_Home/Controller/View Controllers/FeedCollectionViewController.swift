@@ -44,6 +44,7 @@ class FeedCollectionViewController: UICollectionViewController {
 		collectionView.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: FeedCollectionViewCell.reuseIdentifier)
 		collectionView.showsVerticalScrollIndicator = false
 		collectionView.showsHorizontalScrollIndicator = false
+		collectionView.isUserInteractionEnabled = true
 	}
 	
 	private func configureUI() {

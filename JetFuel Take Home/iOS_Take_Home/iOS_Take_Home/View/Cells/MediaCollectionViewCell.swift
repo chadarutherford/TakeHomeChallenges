@@ -24,7 +24,7 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		view.layer.cornerRadius = 15
 		view.layer.cornerCurve = .continuous
 		view.clipsToBounds = true
-		view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 		return view
 	}()
 	
@@ -42,6 +42,7 @@ class MediaCollectionViewCell: UICollectionViewCell {
 	let linkButton: UIButton = {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isUserInteractionEnabled = true
 		button.setImage(.link, for: .normal)
 		button.backgroundColor = .systemBackground
 		button.tintColor = .systemGray
@@ -107,6 +108,8 @@ class MediaCollectionViewCell: UICollectionViewCell {
 			downloadButton.heightAnchor.constraint(equalToConstant: 40),
 			downloadButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
 		])
+		
+		linkButton.addTarget(self, action: #selector(copyLink), for: .touchUpInside)
 	}
 	
 	private func addPlayButton() {
@@ -139,6 +142,12 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		if media.mediaType == "video" {
 			addPlayButton()
 		}
+	}
+	
+	@objc private func copyLink() {
+		guard let media = media else { return }
+		let pasteboard = UIPasteboard.general
+		pasteboard.string = media.trackingLink.absoluteString
 	}
 }
 
