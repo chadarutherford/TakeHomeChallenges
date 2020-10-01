@@ -15,7 +15,6 @@ class FeedCollectionViewCell: UICollectionViewCell {
 		imageView.layer.cornerRadius = 15
 		imageView.clipsToBounds = true
 		imageView.contentMode = .scaleAspectFit
-		imageView.backgroundColor = .blue
 		return imageView
 	}()
 	
@@ -88,7 +87,18 @@ class FeedCollectionViewCell: UICollectionViewCell {
 	}
 	
 	private func updateViews() {
-		guard let campaign = campaign else { return }
+		guard let campaign = campaign,
+			  let campaignController = campaignController
+		else { return }
+		campaignController.fetchImage(for: campaign.iconURL) { [weak self] result in
+			guard let self = self else { return }
+			switch result {
+			case .success(let image):
+				self.iconImageView.image = image
+			case .failure(let error):
+				print(error)
+			}
+		}
 		nameLabel.text = campaign.name
 		payLabel.text = campaign.payPerInstall
 	}

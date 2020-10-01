@@ -53,6 +53,40 @@ class CampaignController {
 	}
 	
 	func fetchImage(for url: URL, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
-		
+		var request = URLRequest(url: url)
+		request.httpMethod = HTTPMethod.get.rawValue
+		URLSession.shared.dataTask(with: request) { data, response, error in
+			guard error == nil else {
+				DispatchQueue.main.async {
+					completion(.failure(.unknownError))
+				}
+				return
+			}
+			
+			if let response = response as? HTTPURLResponse, !self.expectedResponseCodes.contains(response.statusCode) {
+				DispatchQueue.main.async {
+					completion(.failure(.invalidResponse))
+				}
+				return
+			}
+			
+			guard let data = data else {
+				DispatchQueue.main.async {
+					completion(.failure(.invalidData))
+				}
+				return
+			}
+			
+			guard let image = UIImage(data: data) else {
+				DispatchQueue.main.async {
+					completion(.failure(.noImage))
+				}
+				return
+			}
+			
+			DispatchQueue.main.async {
+				completion(.success(image))
+			}
+		}.resume()
 	}
 }
