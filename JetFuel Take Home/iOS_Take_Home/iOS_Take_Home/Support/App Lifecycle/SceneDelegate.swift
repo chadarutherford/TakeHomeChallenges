@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		window = UIWindow(windowScene: windowScene)
 		let layout = FeedCollectionViewLayout()
 		layout.scrollDirection = .vertical
-		let feedViewController = FeedCollectionViewController(collectionViewLayout: layout)
+		let feedViewController = FeedCollectionViewController(layout: layout, campaignController: CampaignController())
 		let navController = UINavigationController(rootViewController: feedViewController)
 		window?.rootViewController = navController
 		window?.makeKeyAndVisible()

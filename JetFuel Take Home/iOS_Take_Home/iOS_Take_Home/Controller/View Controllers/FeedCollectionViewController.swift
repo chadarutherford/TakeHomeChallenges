@@ -8,11 +8,36 @@
 import UIKit
 
 class FeedCollectionViewController: UICollectionViewController {
+	
+	var campaignController: CampaignController
+	var feed: Feed? {
+		didSet {
+			collectionView.reloadData()
+		}
+	}
+	
+	init(layout: UICollectionViewLayout, campaignController: CampaignController) {
+		self.campaignController = campaignController
+		super.init(collectionViewLayout: layout)
+	}
+	
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		configureUI()
 		configureCollectionView()
+		campaignController.fetchFeed { result in
+			switch result {
+			case .success(let feed):
+				self.feed = feed
+			case .failure(let error):
+				print(error)
+			}
+		}
 	}
 	
 	private func configureCollectionView() {
@@ -25,11 +50,13 @@ class FeedCollectionViewController: UICollectionViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return 4
+		feed?.campaigns.count ?? 0
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.reuseIdentifier, for: indexPath)
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FeedCollectionViewCell.reuseIdentifier, for: indexPath) as? FeedCollectionViewCell else { fatalError("Unable to dequeue a FeedCollectionViewCell") }
+		cell.campaignController = campaignController
+		cell.campaign = feed?.campaigns[indexPath.item]
 		return cell
 	}
 }
@@ -37,9 +64,5 @@ class FeedCollectionViewController: UICollectionViewController {
 extension FeedCollectionViewController: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 		CGSize(width: collectionView.frame.width, height: 400)
-	}
-	
-	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-		UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
 	}
 }

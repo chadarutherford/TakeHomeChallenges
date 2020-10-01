@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63329FFC252649F800C74AB9 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63329FFB252649F800C74AB9 /* UIColor+Ext.swift */; };
+		6332A00425264BBC00C74AB9 /* CampaignController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6332A00325264BBC00C74AB9 /* CampaignController.swift */; };
+		6332A00B25264BFD00C74AB9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6332A00A25264BFD00C74AB9 /* Constants.swift */; };
+		6332A01225264CA900C74AB9 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6332A01125264CA900C74AB9 /* HTTPMethod.swift */; };
+		6332A01825264D4D00C74AB9 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6332A01725264D4D00C74AB9 /* NetworkError.swift */; };
 		633C846F25263F8200563141 /* FeedCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633C846E25263F8100563141 /* FeedCollectionViewLayout.swift */; };
 		63AE67452526236E00606251 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AE67442526236E00606251 /* AppDelegate.swift */; };
 		63AE67472526236E00606251 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AE67462526236E00606251 /* SceneDelegate.swift */; };
@@ -31,6 +36,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		63329FFB252649F800C74AB9 /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
+		6332A00325264BBC00C74AB9 /* CampaignController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignController.swift; sourceTree = "<group>"; };
+		6332A00A25264BFD00C74AB9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6332A01125264CA900C74AB9 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		6332A01725264D4D00C74AB9 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		633C846E25263F8100563141 /* FeedCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewLayout.swift; sourceTree = "<group>"; };
 		63AE67412526236E00606251 /* iOS_Take_Home.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Take_Home.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63AE67442526236E00606251 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +76,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63329FFA252649E900C74AB9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				63329FFB252649F800C74AB9 /* UIColor+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6332A00125264B9F00C74AB9 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				63AE67482526236E00606251 /* FeedCollectionViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6332A00225264BAB00C74AB9 /* Model Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6332A00325264BBC00C74AB9 /* CampaignController.swift */,
+			);
+			path = "Model Controller";
+			sourceTree = "<group>";
+		};
+		6332A00925264BF300C74AB9 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				6332A00A25264BFD00C74AB9 /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		6332A01025264C9F00C74AB9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6332A01125264CA900C74AB9 /* HTTPMethod.swift */,
+				6332A01725264D4D00C74AB9 /* NetworkError.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		633C847225263F8600563141 /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +168,9 @@
 		63AE676B252623CA00606251 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				6332A01025264C9F00C74AB9 /* Helpers */,
+				6332A00925264BF300C74AB9 /* Constants */,
+				63329FFA252649E900C74AB9 /* Extensions */,
 				63AE676C252623CF00606251 /* App Lifecycle */,
 				63AE674D2526236F00606251 /* Assets.xcassets */,
 				63AE67522526236F00606251 /* Info.plist */,
@@ -136,7 +190,8 @@
 		63AE676F2526240400606251 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				63AE67482526236E00606251 /* FeedCollectionViewController.swift */,
+				6332A00225264BAB00C74AB9 /* Model Controller */,
+				6332A00125264B9F00C74AB9 /* View Controllers */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -286,10 +341,15 @@
 				63AE67492526236E00606251 /* FeedCollectionViewController.swift in Sources */,
 				63CAD8C425262BAA0032BF58 /* Feed.swift in Sources */,
 				633C846F25263F8200563141 /* FeedCollectionViewLayout.swift in Sources */,
+				6332A01225264CA900C74AB9 /* HTTPMethod.swift in Sources */,
 				63CAD8CA25263ABE0032BF58 /* FeedCollectionViewCell.swift in Sources */,
 				63AE67452526236E00606251 /* AppDelegate.swift in Sources */,
+				6332A00B25264BFD00C74AB9 /* Constants.swift in Sources */,
+				63329FFC252649F800C74AB9 /* UIColor+Ext.swift in Sources */,
 				63CAD8D025263B440032BF58 /* ReuseIdentifiable.swift in Sources */,
+				6332A01825264D4D00C74AB9 /* NetworkError.swift in Sources */,
 				63AE67472526236E00606251 /* SceneDelegate.swift in Sources */,
+				6332A00425264BBC00C74AB9 /* CampaignController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
