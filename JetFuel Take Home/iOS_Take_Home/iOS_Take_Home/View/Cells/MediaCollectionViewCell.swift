@@ -5,6 +5,7 @@
 //  Created by Chad Rutherford on 10/1/20.
 //
 
+import PhotosUI
 import UIKit
 
 class MediaCollectionViewCell: UICollectionViewCell {
@@ -108,7 +109,7 @@ class MediaCollectionViewCell: UICollectionViewCell {
 			downloadButton.heightAnchor.constraint(equalToConstant: 40),
 			downloadButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
 		])
-		
+		downloadButton.addTarget(self, action: #selector(downloadMedia), for: .touchUpInside)
 		linkButton.addTarget(self, action: #selector(copyLink), for: .touchUpInside)
 	}
 	
@@ -141,6 +142,30 @@ class MediaCollectionViewCell: UICollectionViewCell {
 		}
 		if media.mediaType == "video" {
 			addPlayButton()
+		}
+	}
+	
+	@objc private func downloadMedia() {
+		guard let media = media else { return }
+		DispatchQueue.global(qos: .background).async {
+			if let urlData = try? Data(contentsOf: media.downloadURL) {
+				let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+				let filePath = URL(fileURLWithPath: "\(documentsPath)/tempFile.mp4")
+				DispatchQueue.main.async {
+					do {
+						try urlData.write(to: filePath)
+					} catch {
+						print(error)
+					}
+					PHPhotoLibrary.shared().performChanges {
+						PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: filePath)
+					} completionHandler: { completed, error in
+						if completed {
+							print("Video saved!")
+						}
+					}
+				}
+			}
 		}
 	}
 	
